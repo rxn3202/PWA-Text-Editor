@@ -33,7 +33,27 @@ export const putDb = async (content) => {
   console.log('Data saved in the database', result);
 };
 
-// TODO: Add logic for a method that gets all the content from the database
-export const getDb = async () => console.error('getDb not implemented');
+// This method retrieves all content stored in the database.
+export const getDb = async () => {
+  console.log('GET from the database');
 
+  // Establish a connection to the database with the specified name and version.
+  const jateDb = await openDB('jate', 1);
+
+  // Create a new transaction with read-only privileges.
+  const tx = jateDb.transaction('jate', 'readonly');
+
+  // Access the desired object store.
+  const store = tx.objectStore('jate');
+
+  // Use the .getAll() method to retrieve all data from the database.
+  const request = store.getAll();
+
+  // Await confirmation of the request and store the result.
+  const result = await request;
+  console.log('Retrieved data:', result);
+  return result;
+};
+
+// Initialize the database when the module is imported.
 initdb();
